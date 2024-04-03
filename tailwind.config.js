@@ -5,7 +5,7 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./views/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./User/**/*.{js,ts,jsx,tsx,mdx}",
+    "./User/**/*.{js,ts,jsx,tsx,mdx}"
   ],
   theme: {
     extend: {

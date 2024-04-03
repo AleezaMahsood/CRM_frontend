@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+    <link rel="stylesheet" href="user_form.css">
+</head>
+
+<body>
+    <h2>Add Users</h2>
+    <div class="container">
+
+        <div class="box">
+            <form id="Add_Users">
+
+            <div class="form-group">   
+                <label for="full-name">Full Name<span class="required"></span></label>
+                <div class="input-container">
+                    <input type="text" id="first-name" name="first-name" placeholder="Enter First Name" required>
+                    <input type="text" id="last-name" name="last-name" placeholder="Enter Last Name" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email<span class="required"></span></label>
+                <input type="email" id="email" name="email" placeholder="Enter Email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password<span class="required"></span></label>
+                <div class="input-container">
+                    <input type="password" id="password" name="password" placeholder="Enter Password" required>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number<span class="required"></span></label>
+                <input type="tel" id="phone" name="phone" placeholder="Enter Phone Number" pattern="[0-9]{11}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="gender">Gender<span class="required"></span></label>
+                <select id="gender" name="gender" required>
+                    <option value="" disabled selected>Select Gender</option>
+                    <option value="female">Female</option>
+                    <option value="male">Male</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="box">
+            
+
+                <div class="form-group">
+                    <label for="location">Location<span class="required"></span></label>
+                    <select id="location" name="location" required>
+                        <option value="" disabled selected>Select Location</option>
+                        <option value="location1">Location 1</option>
+                        <option value="location2">Location 2</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="department">Department<span class="required"></span></label>
+                    <select id="department" name="department" required>
+                        <option value="" disabled selected>Select Department</option>
+                        <option value="department1">Department 1</option>
+                        <option value="department2">Department 2</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="designation">Designation<span class="required"></span></label>
+                    <select id="designation" name="designation" required>
+                        <option value="" disabled selected>Select Designation</option>
+                        <option value="designation1">Designation 1</option>
+                        <option value="designation2">Designation 2</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="team">Team<span class="required"></span></label>
+                    <select id="team" name="team" required>
+                        <option value="" disabled selected>Select Team</option>
+                        <option value="team1">Team 1</option>
+                        <option value="team2">Team 2</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="role">Role<span class="required"></span></label>
+                    <select id="role" name="role" required>
+                        <option value="" disabled selected>Select Role</option>
+                        <option value="role1">Role 1</option>
+                        <option value="role2">Role 2</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit">Confirm</button>
+                </div>
+
+                <div class="form-group">
+                    <button type="reset">Reset</button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <script src="user_form.js"></script>
+
+</body>
+</html>

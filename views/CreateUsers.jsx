@@ -1,83 +1,146 @@
 'use client';
 import React from 'react'
-import axios from '../utils/axios'
-import { useEnums } from '@/hooks/useEnums'
-
+import styles from '@/styles/user_form.css'
+import { useEnums } from '@/hooks/useEnums';
+import axios from '@/utils/axios';
 const CreateUsers = () => {
-    const { data: enumsData, isLoading, isError } = useEnums();
- console.log(enumsData);
- console.log(isError);
+    const submitForm=(e)=>{
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        //formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+        const frmData = {
+          firstName: formData.get('first-name'),
+          lastName: formData.get('last-name'),
+          email: formData.get('email'),
+          password: formData.get('password'),
+          password_confirmation: formData.get('password_confirmation'),
+          phone: formData.get('phone'),
+          gender: formData.get('gender'),
+          location: formData.get('location'),
+          department: formData.get('department'),
+          designation: formData.get('designation'),
+          team: formData.get('team'),
+          role: formData.get('role'),
+      };
+      
+        
+      console.log(frmData);
+      axios.post(
+        "/api/register",
+        frmData,
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
+       }
+  const { data: enumsData } = useEnums();
     return (
-    <>
-       <div className="max-w-md mx-auto">
-  <form className="mt-8 space-y-6" method="POST" action="#">
-    <div>
-      <label for="name" className="block text-sm font-medium text-gray-700">Name</label>
-      <input id="name" type="text" name="name" required autocomplete="name" className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+        <div className={styles.container} style={{paddingLeft: '20%', paddingRight: '20%', paddingTop:"5rem" ,paddingBottom:"5rem"}}>
+<div className={styles.box}>
+    <form id="Add_Users" onSubmit={submitForm}>
+
+    <div class="form-group">   
+        <label for="full-name">Full Name<span className={styles.required}></span></label>
+        <div class="input-container">
+            <input type="text" id="first-name" name="first-name" placeholder="Enter First Name" required/>
+            <input type="text" id="last-name" name="last-name" placeholder="Enter Last Name" required/>
+        </div>
     </div>
-    <div>
-      <label for="email" className="block text-sm font-medium text-gray-700">Email</label>
-      <input id="email" type="email" name="email" required autocomplete="email" className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+
+    <div class="form-group">
+        <label for="email">Email<span className={styles.required}></span></label>
+        <input type="email" id="email" name="email" placeholder="Enter Email" required/>
     </div>
-    <div>
-      <label for="password" className="block text-sm font-medium text-gray-700">Password</label>
-      <input id="password" type="password" name="password" required autocomplete="new-password" className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+
+    <div class="form-group">
+        <label for="password">Password<span className={styles.required}></span></label>
+        <div c="input-container">
+            <input type="password" id="password" name="password" placeholder="Enter Password" required/>
+            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" required/>
+        </div>
     </div>
-    <div>
-      <label for="password_confirmation" className="block text-sm font-medium text-gray-700">Confirm Password</label>
-      <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
+
+    <div class="form-group">
+        <label for="phone">Phone Number<span className={styles.required}></span></label>
+        <input type="tel" id="phone" name="phone" placeholder="Enter Phone Number" pattern="[0-9]{11}" required />
     </div>
     
-    <div>
-      <label for="gender" className="block text-sm font-medium text-gray-700">Gender</label>
-      <select id="gender" name="gender" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-        <option value="other">Other</option>
-      </select>
+    <div class="form-group">
+        <label for="gender">Gender<span className={styles.required}></span></label>
+        <select id="gender" name="gender" required>
+            <option value="" disabled selected>Select Gender</option>
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+        </select>
     </div>
-    <div>
-      <label for="location" className="block text-sm font-medium text-gray-700">Location</label>
-      <select id="location" name="location" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-      {enumsData?.locations?.map(location => (
+
+<div className={styles.box}>
+    
+
+        <div class="form-group">
+            <label for="location">Location<span className={styles.required}></span></label>
+            <select id="location" name="location" required>
+                <option value="" disabled selected>Select Location</option>
+                {enumsData?.locations?.map(location => (
               <option key={location} value={location}>{location}</option>
             ))}
-      </select>
-    </div>
-    <div>
-      <label for="department" className="block text-sm font-medium text-gray-700">Department</label>
-      <select id="department" name="department" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-        
-      </select>
-    </div>
-    <div>
-      <label for="designation" className="block text-sm font-medium text-gray-700">Designation</label>
-      <select id="designation" name="designation" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-       
-      </select>
-    </div>
-    <div>
-      <label for="team" className="block text-sm font-medium text-gray-700">Team</label>
-      <select id="team" name="team" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-       
-      </select>
-    </div>
-    <div>
-      <label for="role" className="block text-sm font-medium text-gray-700">Role</label>
-      <select id="role" name="role" className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </select>
+        </div>
 
-      </select>
-    </div>
-    <div>
-      <button type="submit" className="mt-4 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-        Register
-      </button>
-    </div>
-  </form>
+        <div class="form-group">
+            <label for="department">Department<span className={styles.required}></span></label>
+            <select id="department" name="department" required>
+                <option value="" disabled selected>Select Department</option>
+                {enumsData?.departments?.map(department => (
+              <option key={department} value={department}>{department}</option>
+            ))}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="designation">Designation<span className={styles.required}></span></label>
+            <select id="designation" name="designation" required>
+                <option value="" disabled selected>Select Designation</option>
+                {enumsData?.designations?.map(designation => (
+              <option key={designation} value={designation}>{designation}</option> 
+                ))}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="team">Team<span className={styles.required}></span></label>
+            <select id="team" name="team" required>
+                <option value="" disabled selected>Select Team</option>
+                {enumsData?.teams?.map(team => (
+              <option key={team} value={team}>{team}</option> 
+                ))}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="role">Role<span className={styles.required}></span></label>
+            <select id="role" name="role" required>
+                <option value="" disabled selected>Select Role</option>
+                {enumsData?.roles?.map(role => (
+              <option key={role} value={role}>{role}</option> 
+                ))}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <button type="submit">Confirm</button>
+        </div>
+
+        <div class="form-group">
+            <button type="reset">Reset</button>
+        </div>
+</div>
+    </form>
+</div>
 </div>
 
-    </>
   )
 }
-
 export default CreateUsers
