@@ -1,11 +1,12 @@
 'use client'
 import 'react' from 'react'
+import styles from '@/styles/navbar.css'
 const Navbar=()=>{
     return(
         <>
-           <nav className="sidebar close">
+           <nav className={styles.sidebar} style={{close}}>
         <header>
-        <div className="image_text">
+        <div className={styles.image_text}>
             <span className="image">
                 <img src="logo.jpg" alt="logo" />
             </span>
