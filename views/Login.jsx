@@ -12,18 +12,25 @@ const Login = () => {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      axios.post("/api/login", {
-        email,
-        password,
-        headers: { "Content-Type": "application/json" },
+    try{
+    axios.post("/api/login", {
+      email,
+      password,
+    }, {
+      headers: { "Content-Type": "application/json" }, // Move headers outside of the data payload
     })
     .then(response => {
         if(response.data.success === true) {
-          const token = response.data.token;
-          console.log(token);
+          const token = response?.data?.access_token;
+          const userId=response?.data?.user.id;
+          console.log(token)
           // Save token to localStorage or cookie
-          localStorage.setItem("token", token);
+         localStorage.setItem("token", token);
+          localStorage.setItem('userId', userId.toString());
+         // const storedToken = localStorage.getItem('token');
+           //const storedUserId = localStorage.getItem('userId');
+           //console.log(storedToken); // Output: MGJdMH7q41P8uI6w7mc7dXAPWTkWHah7DZuXjSq27109d6da
+           //console.log(storedUserId);
           handleLoginSuccess(token);
           // Redirect or perform additional actions
         }
@@ -34,7 +41,7 @@ const Login = () => {
     
       const handleLoginSuccess = (token) => {
         // Redirect or perform additional actions
-        router.push("Leads/CreateLeads");
+        router.push("user/dashboard");
     }
       
     }
@@ -59,7 +66,7 @@ const Login = () => {
               >
                 <div>
                   <label
-                    for="email"
+                    htmlFor="email"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Your email
@@ -77,7 +84,7 @@ const Login = () => {
                 </div>
                 <div>
                   <label
-                    for="password"
+                    htmlFor="password"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Password
@@ -89,7 +96,8 @@ const Login = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     id="password"
                     placeholder="••••••••"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    style={{ width: "100%" }}
+                    className=" bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   />
                 </div>
@@ -106,7 +114,7 @@ const Login = () => {
                     </div>
                     <div className="ml-3 text-sm">
                       <label
-                        for="remember"
+                        htmlFor="remember"
                         className="text-gray-500 dark:text-gray-300"
                       >
                         Remember me
@@ -120,21 +128,10 @@ const Login = () => {
                     Forgot password?
                   </a>
                 </div>
-                <button
-                  type="submit"
-                  className="w-full text-white bg-sky-500 hover:bg-sky-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                >
-                  Sign in
-                </button>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Don’t have an account yet?{" "}
-                  <a
-                    href="#"
-                    className="font-medium text-sky-700 text-primary-600 hover:underline dark:text-primary-500"
-                  >
-                    Sign up
-                  </a>
-                </p>
+                <button type="submit" style={{ width: "100%",backgroundColor:"blue" }} className="  text-white bg-teal-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
+                  <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                      Don’t have an account yet? <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</a>
+                  </p>
               </form>
             </div>
           </div>
