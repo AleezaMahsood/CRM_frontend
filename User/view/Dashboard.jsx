@@ -8,16 +8,33 @@ const Dashboard = () => {
     // Get the user en from local storage or wherever it's stored
     const [token, setToken] = useState('');
     const [userId, setUserId] = useState('');
-  // Effect to retrieve the token from local storage when the component mounts
+  // Effect to retrieve the token from local storage when the component mounts 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    const storedUserId = localStorage.getItem('userId');
-    setToken(storedToken);
-    setUserId(storedUserId);
-    
-  }, []);
+    // Fetch user data after component mounts
+    fetch('http://localhost:8000/api/auth/me', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch user data');
+        }
+        return response.json();
+    })
+    .then(userData => {
+        setUserId(userData.id);
+        // Once the user ID is obtained, fetch the lead count data
+      
+    })
+    .catch(error => {
+        console.error('Error fetching user data:', error);
+
+    });
+}, []);
   const { data, isLoading, isError } = useLeadCount(userId);
-  console.log(data)
   return (
     <>
     <div className='text-3xl text-[black] font-bold mx-7 my-7 '>Dashboard</div>

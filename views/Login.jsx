@@ -13,30 +13,31 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     try{
-    axios.post("/api/login", {
+    axios.post("/api/auth/login", {
       email,
       password,
     }, {
       headers: { "Content-Type": "application/json" }, // Move headers outside of the data payload
     })
     .then(response => {
-        if(response.data.success === true) {
+        if(response.data.access_token) {
           const token = response?.data?.access_token;
-          const userId=response?.data?.user.id;
-          console.log(token)
+          //const userId=response?.data?.user.id;
           // Save token to localStorage or cookie
          localStorage.setItem("token", token);
-          localStorage.setItem('userId', userId.toString());
+         console.log(token)
+      //    localStorage.setItem('userId', userId.toString());
          // const storedToken = localStorage.getItem('token');
            //const storedUserId = localStorage.getItem('userId');
            //console.log(storedToken); // Output: MGJdMH7q41P8uI6w7mc7dXAPWTkWHah7DZuXjSq27109d6da
            //console.log(storedUserId);
           handleLoginSuccess(token);
           // Redirect or perform additional actions
-        }
-        else {
+        }else {
            alert("Wrong Cresendials"); 
         }
+      }).catch(error => {
+          alert("Wrong Cresendials");
       })
     
       const handleLoginSuccess = (token) => {

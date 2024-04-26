@@ -26,7 +26,7 @@ const CreateUsers = () => {
         
       console.log(frmData);
       axios.post(
-        "/api/register",
+        "/api/auth/register",
         frmData,
         {
           headers: {
