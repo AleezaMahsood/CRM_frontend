@@ -3,6 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import CountLeads from "./CountLeads";
 import useLeadCount from "@/hooks/useLeadCount";
+import ShowChart from "@/User/view/ShowChart"
 
 const Dashboard = () => {
   // Get the user en from local storage or wherever it's stored
@@ -33,19 +34,20 @@ const Dashboard = () => {
       });
   }, []);
   const { data, isLoading, isError } = useLeadCount(userId);
+  console.log(userId)
 
   return (
     <>
-      <div className="text-3xl text-[black] font-bold mx-7 my-7 ">
+      <div className="sm:mx-0 sm:my-0 text-[20px] text-[black] font-bold md:mx-4 md:mt-8 ">
         Dashboard
       </div>
       {isLoading ? ( // Display loading indicator while loading
         <p>Loading...</p>
       ) : (
-        <div className="flex flex-row justify-center align-center gap-[20px] flex-wrap">
+        <div className="flex flex-row justify-center align-center gap-[2rem] flex-wrap">
           {Object.keys(data).map((key, index) => (
             <a key={index} href={`/user/LeadsByStatus/?status=${key}`}>
-              <div className="flex flex-row justify-between h-[4.5rem] w-full shadow-md rounded-xl bg-white dark:bg-background-darkSecondary">
+              <div className="flex flex-row justify-between h-[5rem] w-full shadow-md rounded-xl bg-white dark:bg-background-darkSecondary">
                 <div style={{backgroundColor:"#D3D3D3",borderRadius:"5px"}}>
                   <img
                     src="/status.svg"
@@ -56,10 +58,10 @@ const Dashboard = () => {
                   />
                 </div>
                 <div className="flex flex-col mt-4 ml-4 w-[10rem] gap-2">
-                  <span className="mb-1 text-blueGray-500 text-sm md:text-md dark:text-blueGray-300 md:font-medium font-semibold text-grey dark:text-white">
+                  <span className="mb-1 ml-3 text-blueGray-500 text-sm font-bold  dark:text-blueGray-300 md:font-bold text-grey dark:text-white">
                     {key}
                   </span>
-                  <span className="ml-2 text-black font-medium dark:text-white text-xs uppercase">
+                  <span className="ml-3 font-bold text-black dark:text-white text-[12px] uppercase">
                     {data[key]} Leads
                   </span>
                 </div>
@@ -68,6 +70,10 @@ const Dashboard = () => {
           ))}
         </div>
       )}
+      <div className=" mt-7 text-[20px]  font-bold mx-7 my-7">
+        User Performance
+      </div>
+      <ShowChart userId={userId} />
     </>
   );
 };

@@ -25,13 +25,6 @@ function BarChart({ data }) {
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1,
                     },
-                    {
-                        label: 'Conversion Rate',
-                        data: data.conversionRate,
-                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1,
-                    },
                 ]
             },
             options: {
@@ -52,7 +45,7 @@ function BarChart({ data }) {
     }, [data]); // Re-render the chart when the data prop changes
 
     return (
-        <div>
+        <div style={{ width: '50rem', height: '50rem', margin: 'auto' }}> 
             <canvas ref={chartRef} />
         </div>
     );

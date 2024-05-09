@@ -5,7 +5,6 @@ import CreateCampaign from "@/views/CreateCampaigns";
 import Navbar from "@/User/view/navbar"
 import Createform from "@/User/view/CreateLead";
 import CreateUsers from "@/views/CreateUsers";
-import ViewUser from "@/views/ViewUser";
 import ShowChart from "@/User/view/ShowChart";
 import Dashboard from "@/User/view/Dashboard";
 import BarChart from "@/User/view/UserPerformance";
@@ -15,7 +14,7 @@ export default function Home() {
     <main>
       {/* <CreateLeads /> */}
    {/* <CreateUsers /> */}
-   <Login />
+    <Login />
     </main>
   );
 }
