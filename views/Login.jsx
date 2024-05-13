@@ -9,48 +9,47 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  
-  const handleSubmit = (e) => {
+  const [userRole, setUserRole] = useState("");
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
-    axios.post("/api/auth/login", {
-      email,
-      password,
-    }, {
-      headers: { "Content-Type": "application/json" }, // Move headers outside of the data payload
-    })
-    .then(response => {
-        if(response.data.access_token) {
-          const token = response?.data?.access_token;
-          //const userId=response?.data?.user.id;
-          // Save token to localStorage or cookie
-         localStorage.setItem("token", token);
-         console.log(token)
-      //    localStorage.setItem('userId', userId.toString());
-         // const storedToken = localStorage.getItem('token');
-           //const storedUserId = localStorage.getItem('userId');
-           //console.log(storedToken); // Output: MGJdMH7q41P8uI6w7mc7dXAPWTkWHah7DZuXjSq27109d6da
-           //console.log(storedUserId);
-          handleLoginSuccess(token);
-          // Redirect or perform additional actions
-        }else {
-           alert("Wrong Cresendials"); 
+    try {
+      const response = await axios.post("/api/auth/login", {
+        email,
+        password,
+      });
+  
+      if (response.data.access_token) {
+        const token = response.data.access_token;
+        localStorage.setItem("token", token);
+  
+        // Fetch user data after successful login
+        const userDataResponse = await axios.post("/api/auth/me", null, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+  
+        // Once user data is obtained, set the user role state
+        setUserRole(userDataResponse.data.role);
+  
+        // Redirect based on user role
+        if (userDataResponse.data.role === "admin") {
+          router.push("/Leads/CreateLeads");
+        } else {
+          router.push("/user/dashboard");
         }
-      }).catch(error => {
-          alert("Wrong Cresendials");
-      })
-    
-      const handleLoginSuccess = (token) => {
-        // Redirect or perform additional actions
-        router.push("user/dashboard");
-    }
-      
-    }
-    catch (err) {
-      const errorMessage = err.response?.data?.message || "An error occurred";
-      setError(errorMessage);
+      } else {
+        // Handle login error
+        alert("Login Failed")
+      }
+    } catch (error) {
+      // Handle login error
+      alert("Login failed", error);
+      setError("An error occurred");
     }
   };
+  
   return (
     <>
       <section className="bg-gray-50 dark:bg-gray-900">

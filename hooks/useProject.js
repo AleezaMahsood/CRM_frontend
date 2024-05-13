@@ -5,7 +5,7 @@ const useproject = () => {
   return useQuery({
     queryKey: ["Projectsdata"],
     queryFn: () =>
-      axios.get("http://localhost:8000/api/Projects").then((res) => res.data),
+      axios.get("http://localhost:8000/api/projects").then((res) => res.data),
   });
 };
 export default useproject;

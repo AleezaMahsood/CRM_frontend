@@ -1,10 +1,8 @@
-
-import ViewLeads from '@/views/ViewLeads'
 import React from 'react'
-
+import ViewUsers from '@/views/ViewUsers'
 const page = () => {
   return (
-     <ViewLeads />
+    <ViewUsers />
   )
 }
 

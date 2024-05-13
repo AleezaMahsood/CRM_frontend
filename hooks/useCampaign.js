@@ -5,7 +5,7 @@ const useCampaign = () => {
   return useQuery({
     queryKey: ["Campaignsdata"],
     queryFn: () =>
-      axios.get("http://127.0.0.1:8000/api/Campaigns").then((res) => res.data),
+      axios.get("http://127.0.0.1:8000/api/campaigns").then((res) => res.data),
   });
 };
 export default useCampaign;
