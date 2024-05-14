@@ -1,104 +1,146 @@
-import React from "react";
-
-const CreateLead = () => {
-  return (
-    <>
-      <section className="bg-white dark:bg-gray-900">
-        <div className="py-8 px-4 mx-auto my-auto max-w-xl lg:max-w-[50rem]">
-            <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">New Lead</h2>
-            <hr className="mb-4" />
-            <form method="post" action="#"  className="space-y-6">
-                <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Add Leads</h3>
-                    <p className="text-gray-500 text-sm mb-4">Add details such as name, phone number, date and project.</p>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div>
-                            <label for="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name:</label>
-                            <input style={{width:"100%"}} type="text" name="leadName" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full lg:w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=" -----" required="" />
-                        </div>
-                        <div>
-                            <label for="company" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company</label>
-                            <input style={{width:"100%"}} type="text" name="company" id="company" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=" -----" required="" />
-                        </div>
-                        <div>
-                            <label for="job_title" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Job Title:</label>
-                            <input style={{width:"100%"}} type="text" name="job_title" id="desc" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"  placeholder=" -----" required="" />
-                        </div>
-                       
-                        <div>
-                            <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email:</label>
-                            <input style={{width:"100%"}} type="text" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=" -----" required="" />
-                        </div>
-                        <div>
-                            <label for="phone" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone:</label>
-                            <input style={{width:"100%"}} type="text" name="phone" id="phone" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=" -----" required="" />
-                        </div>
-                        <div>
-                            <label for="fax" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fax:</label>
-                            <input style={{width:"100%"}} type="text" name="fax" id="fax" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="-----" required="" />
-                        </div>
+'use client';
+import React from 'react'
+import styles from '@/styles/user_form.css'
+import { useEnums } from '@/hooks/useEnums';
+import axios from '@/utils/axios';
+const CreateUsers = () => {
+    const submitForm=(e)=>{
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        //formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+        const frmData = {
+          firstName: formData.get('first-name'),
+          lastName: formData.get('last-name'),
+          email: formData.get('email'),
+          password: formData.get('password'),
+          password_confirmation: formData.get('password_confirmation'),
+          phone: formData.get('phone'),
+          gender: formData.get('gender'),
+          location: formData.get('location'),
+          department: formData.get('department'),
+          designation: formData.get('designation'),
+          team: formData.get('team'),
+          role: formData.get('role'),
+      };
+      
         
-                        <div>
-                            <label for="mobile" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mobile:</label>
-                            <input style={{width:"100%"}} type="text" name="mobile" id="mobile" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=" -----" required="" />
-                        </div>
-                        <div>
-                            <label for="website" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Website:</label>
-                            <input style={{width:"100%"}} type="text" name="website" id="website" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=" -----" required="" />
-                        </div>
-                        <div>
-                            <label for="whatsapp" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Whatsapp:</label>
-                            <input style={{width:"100%"}} type="text" name="whatsapp" id="whatsapp" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=" -----" required="" />
-                        </div>
-                        <div>
-                            <label for="status" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status:</label>
-                            <input style={{width:"100%"}} type="text" name="status" id="status" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=" -----" required="" />
-                        </div>
-                        <div>
-                            <label for="source" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Source:</label>
-                            <input style={{width:"100%"}} type="text" name="source" id="source" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=" -----" required="" />
-                        </div>
-                        <div>
-                            <label for="employees" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Employees:</label>
-                            <input style={{width:"100%"}} type="text" name="employees" id="employees" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=" -----" required="" />
-                        </div>
-                
-                  
-                        <div>
-                            <label for="industry" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Industry:</label>
-                            <input style={{width:"100%"}} type="text" name="industry" id="Industry" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=" -----" required="" />
-                        </div>
-                        <div>
-                            <label for="rating" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rating:</label>
-                            <input style={{width:"100%"}} type="text" name="rating" id="rating" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=" -----" required="" />
-                        </div>
-               
-                        <div>
-                            <label for="revenue" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Revenue:</label>
-                            <input style={{width:"100%"}} type="text" name="revenue" id="revenue" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=" -----" required="" />
-                        </div>
-                        <div>
-                            <label for="skype" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Skype:</label>
-                            <input style={{width:"100%"}} type="text" name="skype" id="skype" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=" -----" required="" />
-                        </div>
-                                 
-                        <div>
-                            <label for="twitter" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Twitter:</label>
-                            <input style={{width:"100%"}} type="text" name="twitter" id="twitter" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="-----" required="" />
-                        </div>
-                        <div>
-                            <label for="date" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date:</label>
-                            <input style={{width:"100%"}} type="date" name="date" id="date" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="-----" required="" />
-                        </div>
-                    </div>
+      console.log(frmData);
+      axios.post(
+        "/api/auth/register",
+        frmData,
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
+       }
+  const { data: enumsData } = useEnums();
+    return (
+        <div className={styles.container} style={{paddingLeft: '20%', paddingRight: '20%', paddingTop:"5rem" ,paddingBottom:"5rem"}}>
+<div className={styles.box}>
+    <form id="Add_Users" onSubmit={submitForm}>
 
-                <input type="submit" value="Add Campaign" className="inline-flex bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" />
-            </form>
+    <div class="form-group">   
+        <label for="full-name">Full Name<span className={styles.required}></span></label>
+        <div class="input-container">
+            <input type="text" id="first-name" name="first-name" placeholder="Enter First Name" required/>
+            <input type="text" id="last-name" name="last-name" placeholder="Enter Last Name" required/>
         </div>
-    </section>
-    </>   
-  );
-};
+    </div>
 
-export default CreateLead;
+    <div class="form-group">
+        <label for="email">Email<span className={styles.required}></span></label>
+        <input type="email" id="email" name="email" placeholder="Enter Email" required/>
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password<span className={styles.required}></span></label>
+        <div c="input-container">
+            <input type="password" id="password" name="password" placeholder="Enter Password" required/>
+            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" required/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="phone">Phone Number<span className={styles.required}></span></label>
+        <input type="tel" id="phone" name="phone" placeholder="Enter Phone Number" pattern="[0-9]{11}" required />
+    </div>
+    
+    <div class="form-group">
+        <label for="gender">Gender<span className={styles.required}></span></label>
+        <select id="gender" name="gender" required>
+            <option value="" disabled selected>Select Gender</option>
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+        </select>
+    </div>
+
+<div className={styles.box}>
+    
+
+        <div class="form-group">
+            <label for="location">Location<span className={styles.required}></span></label>
+            <select id="location" name="location" required>
+                <option value="" disabled selected>Select Location</option>
+                {enumsData?.locations?.map(location => (
+              <option key={location} value={location}>{location}</option>
+            ))}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="department">Department<span className={styles.required}></span></label>
+            <select id="department" name="department" required>
+                <option value="" disabled selected>Select Department</option>
+                {enumsData?.departments?.map(department => (
+              <option key={department} value={department}>{department}</option>
+            ))}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="designation">Designation<span className={styles.required}></span></label>
+            <select id="designation" name="designation" required>
+                <option value="" disabled selected>Select Designation</option>
+                {enumsData?.designations?.map(designation => (
+              <option key={designation} value={designation}>{designation}</option> 
+                ))}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="team">Team<span className={styles.required}></span></label>
+            <select id="team" name="team" required>
+                <option value="" disabled selected>Select Team</option>
+                {enumsData?.teams?.map(team => (
+              <option key={team} value={team}>{team}</option> 
+                ))}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="role">Role<span className={styles.required}></span></label>
+            <select id="role" name="role" required>
+                <option value="" disabled selected>Select Role</option>
+                {enumsData?.roles?.map(role => (
+              <option key={role} value={role}>{role}</option> 
+                ))}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <button type="submit">Confirm</button>
+        </div>
+
+        <div class="form-group">
+            <button type="reset">Reset</button>
+        </div>
+</div>
+    </form>
+</div>
+</div>
+
+  )
+}
+export default CreateUsers
