@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import useProject from "@/hooks/useProject";
+import { useProjectEnums } from '@/hooks/useProjectEnums';
 import axios from "@/utils/axios";
 
 const CreateProject = () => {
@@ -22,7 +23,7 @@ const CreateProject = () => {
       },
     });
   };
-
+  const { data: enumsData } = useProjectEnums();
   return (
     <section className="bg-white dark:bg-gray-900">
       <div className="py-8 px-4 mx-auto max-w-xl lg:max-w-2xl">
@@ -69,12 +70,13 @@ const CreateProject = () => {
                   name="project_location"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 >
-                  <option value="">--Select Location--</option>
-                  <option value="lahore">Lahore</option>
-                  <option value="karachi">Karachi</option>
-                  <option value="quetta">Quetta</option>
-                  <option value="rawalpindi">Rawalpindi</option>
+
+                  <option value="" disabled selected>Select Location</option>
+                {enumsData?.project_locations?.map(project_location => (
+              <option key={project_location} value={project_location}>{project_location}</option> 
+                ))}
                 </select>
+
               </div>
               <div>
                 <label
@@ -88,13 +90,10 @@ const CreateProject = () => {
                   name="project_type"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                 >
-                  <option value="">--Select Type--</option>
-                  <option value="environmental">Environmental Project</option>
-                  <option value="healthcare">Healthcare Project</option>
-                  <option value="IT">Information Technology Project</option>
-                  <option value="event_management">
-                    Event Management Project
-                  </option>
+                   <option value="" disabled selected>Select Project Type</option>
+                {enumsData?.project_types?.map(project_type => (
+              <option key={project_type} value={project_type}>{project_type}</option> 
+                ))}
                 </select>
               </div>
             </div>
