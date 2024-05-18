@@ -8,7 +8,7 @@ const ShowChart = ({userId}) => {
   const {data,isLoading,isError}=useUserPerformance(userId)
   console.log(data)
   if (isError) {
-    return <div>Error: Unable to fetch data</div>;
+    return <div className='text-bold mt-5 text-[grey]'>Error: Unable to fetch data</div>;
   }
 
   // If data exists, extract labels and totalLeads, otherwise provide default values

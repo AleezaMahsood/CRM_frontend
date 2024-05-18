@@ -45,7 +45,7 @@ const Dashboard = () => {
         <p>Loading...</p>
       ) : (
         <div className="flex flex-row justify-center align-center gap-[2rem] flex-wrap">
-          {Object.keys(data).map((key, index) => (
+          {data && Object.keys(data).map((key, index) => (
             <a key={index} href={`/user/LeadsByStatus/?status=${key}`}>
               <div className="flex flex-row justify-between h-[5rem] w-full shadow-md rounded-xl bg-white dark:bg-background-darkSecondary">
                 <div style={{backgroundColor:"#D3D3D3",borderRadius:"5px"}}>
@@ -70,7 +70,7 @@ const Dashboard = () => {
           ))}
         </div>
       )}
-      <div className=" mt-7 text-[20px]  font-bold mx-7 my-7">
+      <div className="sm:mx-0 sm:my-0 text-[20px] text-[black] font-bold md:mx-4 md:mt-8">
         User Performance
       </div>
       <ShowChart userId={userId} />
