@@ -8,13 +8,13 @@ import CreateUsers from "@/views/CreateUsers";
 import ShowChart from "@/User/view/ShowChart";
 import Dashboard from "@/User/view/Dashboard";
 import BarChart from "@/User/view/UserPerformance";
-
+import Sidebar from "@/components/Sidebar"
 export default function Home() {
   return (
     <main>
       {/* <CreateLeads /> */}
    {/* <CreateUsers /> */}
-    <Login />
+    <Sidebar />
     </main>
   );
 }
