@@ -5,16 +5,17 @@ import CreateCampaign from "@/views/CreateCampaigns";
 import Navbar from "@/User/view/navbar"
 import Createform from "@/User/view/CreateLead";
 import CreateUsers from "@/views/CreateUsers";
-import ShowChart from "@/User/view/ShowChart";
+import UserSidebar from "@/components/UserSidebar";
 import Dashboard from "@/User/view/Dashboard";
-import BarChart from "@/User/view/UserPerformance";
+
 import Sidebar from "@/components/Sidebar"
+import AdminGraph from "@/views/AdminGraph";
 export default function Home() {
   return (
     <main>
       {/* <CreateLeads /> */}
    {/* <CreateUsers /> */}
-    <Sidebar />
+      <UserSidebar />
     </main>
   );
 }

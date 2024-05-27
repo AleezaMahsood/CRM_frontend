@@ -3,7 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import CountLeads from "./CountLeads";
 import useLeadCount from "@/hooks/useLeadCount";
-import ShowChart from "@/User/view/ShowChart"
+import UserChart from "@/User/view/UserChart";
 
 const Dashboard = () => {
   // Get the user en from local storage or wherever it's stored
@@ -73,7 +73,7 @@ const Dashboard = () => {
       <div className="sm:mx-0 sm:my-0 text-[20px] text-[black] font-bold md:mx-4 md:mt-8">
         User Performance
       </div>
-      <ShowChart userId={userId} />
+      <UserChart userId={userId} />
     </>
   );
 };

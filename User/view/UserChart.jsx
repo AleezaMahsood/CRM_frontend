@@ -1,10 +1,9 @@
 // YourNextPage.js
 import React from 'react';
-import UserPerformance from './UserPerformance';
-import BarChart from './UserPerformance';
+import BarChart from '@/components/UserPerformance';
 import useUserPerformance from "@/hooks/useUserPerformance"
 
-const ShowChart = ({userId}) => {
+const UserChart = ({userId}) => {
   const {data,isLoading,isError}=useUserPerformance(userId)
   console.log(data)
   if (isError) {
@@ -26,4 +25,4 @@ const ShowChart = ({userId}) => {
   );
 };
 
-export default ShowChart;
+export default UserChart;
