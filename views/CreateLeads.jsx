@@ -9,9 +9,31 @@ const CreateLeads = () => {
       project_id:null , // Storing the project ID directly
       // other form fields
   });
-
-
-  useEffect(() => {
+    const [token, setToken] = useState("");
+    const [userId, setUserId] = useState("");
+    // Effect to retrieve the token from local storage when the component mounts
+    useEffect(() => {
+      // Fetch user data after component mounts
+      fetch("http://localhost:8000/api/auth/me", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch user data");
+          }
+          return response.json();
+        })
+        .then((userData) => {
+          setUserId(userData.id);
+          // Once the user ID is obtained, fetch the lead count data
+        })
+        .catch((error) => {
+          console.error("Error fetching user data:", error);
+        });
     const fetchProjects = async () => {
         try {
             const response = await axios.get('/api/projects');
@@ -27,6 +49,7 @@ const CreateLeads = () => {
   const submitForm = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+    formData.append('created_by', userId);
     const frmData = {
       leadName: formData.get("leadName"),
       phoneNumber: formData.get("phoneNumber"),
@@ -35,10 +58,11 @@ const CreateLeads = () => {
       budget: formData.get("budget"),
       date: formData.get("date"),
       status: formData.get('status'), // corrected to match the input's name
+      created_by: formData.get('created_by'),
     };
 
     console.log(frmData);
-    axios.post("/api/leads", frmData, {
+    axios.post("/api/leads/admin", frmData, {
       headers: {
         "Content-Type": "application/json",
       },

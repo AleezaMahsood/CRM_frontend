@@ -115,7 +115,7 @@ const Sidebar = () => {
           </div>
           <ul className="space-y-2 font-medium">
             <li>
-              <a href="user/dashboard" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+              <a href="/adminDashboard" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
               <svg
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"

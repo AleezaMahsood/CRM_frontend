@@ -83,7 +83,6 @@ const AdminChart = () => {
 
   return (
     <div>
-      <h2>Leads Data</h2>
       {
         chartData?.datasets?.length >0 &&
         <Line data={chartData} options={options} />
