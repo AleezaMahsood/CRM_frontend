@@ -1,70 +1,82 @@
 'use client'
 import React, { useEffect } from 'react';
-import '../styles/table.css'
-const Table = ({ data, tableId, entriesPerPageSelectId, paginationId, headings, rows }) => {
+import '../styles/table.css';
+
+const Table = ({ data, tableId, entriesPerPageSelectId, paginationId, headings, rows, title}) => {
   useEffect(() => {
-    if(data){
-    const table = document.getElementById(tableId);
-    const pagination = document.getElementById(paginationId);
-    const entriesPerPageSelect = document.getElementById(entriesPerPageSelectId);
+    if (data) {
+      const table = document.getElementById(tableId);
+      const pagination = document.getElementById(paginationId);
+      const entriesPerPageSelect = document.getElementById(entriesPerPageSelectId);
 
-    let currentPage = 1;
-    let entriesPerPage = parseInt(entriesPerPageSelect.value);
+      let currentPage = 1;
+      let entriesPerPage = parseInt(entriesPerPageSelect.value);
 
-    function displayEntries() {
-      const indexOfLastEntry = currentPage * entriesPerPage;
-      const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
-      const currentEntries = data?.slice(indexOfFirstEntry, indexOfLastEntry);
+      function displayEntries() {
+        const indexOfLastEntry = currentPage * entriesPerPage;
+        const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
+        const currentEntries = data?.slice(indexOfFirstEntry, indexOfLastEntry);
 
-      table.querySelector('tbody').innerHTML = '';
+        table.querySelector('tbody').innerHTML = '';
 
-      currentEntries?.forEach(entry => {
-        const row = document.createElement('tr');
-        rows.forEach(rowItem => {
-          const cell = document.createElement('td');
-          // Check if the entry value is null or undefined
-          if (entry[rowItem] === null || entry[rowItem] === undefined) {
-            cell.textContent = 'N/A'; // Set cell content to 'N/A' for null or undefined values
-          } else {
-            cell.textContent = entry[rowItem]; // Otherwise, set cell content to the entry value
-          }
-          row.appendChild(cell);
+        currentEntries?.forEach(entry => {
+          const row = document.createElement('tr');
+          rows.forEach(rowItem => {
+            const cell = document.createElement('td');
+
+            if (rowItem === 'nameEmail') {
+              cell.innerHTML = `<strong>${entry.name}</strong><br/><a href="mailto:${entry.email}">${entry.email}</a>`;
+            } 
+            else if (rowItem === 'leadNamePhone') {
+              cell.innerHTML = `<strong>${entry.leadName}</strong><br/><a href="mailto:${entry.phone}">${entry.phone}</a>`;
+            }
+            else if (rowItem === 'user_id_Dept') {
+              cell.innerHTML = `<strong>${entry.user_id}</strong><br/><a href="mailto:${entry.Dept}">${entry.Dept}</a>`;
+            }
+            else if (entry[rowItem] === null || entry[rowItem] === undefined) {
+              cell.textContent = '-'; 
+            }
+            else {
+              // Handling single values
+              cell.textContent = entry[rowItem] ?? 'N/A'; // Using nullish coalescing operator for 'N/A'
+            }
+
+            row.appendChild(cell);
+          });
+          table.querySelector('tbody').appendChild(row);
         });
-        table.querySelector('tbody').appendChild(row);
-      });
-      
-    }
-
-    function displayPagination() {
-      pagination.innerHTML = '';
-      const totalPages = Math.ceil(data?.length / entriesPerPage);
-      for (let i = 1; i <= totalPages; i++) {
-        const button = document.createElement('button');
-        button.textContent = i;
-        button.addEventListener('click', () => {
-          currentPage = i;
-          displayEntries();
-          displayPagination();
-        });
-        pagination.appendChild(button);
       }
-    }
 
-    entriesPerPageSelect.addEventListener('change', () => {
-      entriesPerPage = parseInt(entriesPerPageSelect.value);
-      currentPage = 1;
+      function displayPagination() {
+        pagination.innerHTML = '';
+        const totalPages = Math.ceil(data?.length / entriesPerPage);
+        for (let i = 1; i <= totalPages; i++) {
+          const button = document.createElement('button');
+          button.textContent = i;
+          button.addEventListener('click', () => {
+            currentPage = i;
+            displayEntries();
+            displayPagination();
+          });
+          pagination.appendChild(button);
+        }
+      }
+
+      entriesPerPageSelect.addEventListener('change', () => {
+        entriesPerPage = parseInt(entriesPerPageSelect.value);
+        currentPage = 1;
+        displayEntries();
+        displayPagination();
+      });
+
       displayEntries();
       displayPagination();
-    });
-
-    displayEntries();
-    displayPagination();
-     }
+    }
   }, [data, tableId, entriesPerPageSelectId, paginationId, rows]);
 
   return (
     <div className="table-container">
-      <h2>All Leads</h2>
+      <h2 className="table-title">{title}</h2>
       <div className="table-wrapper">
         <table id={tableId}>
           <thead>
@@ -89,10 +101,10 @@ const Table = ({ data, tableId, entriesPerPageSelectId, paginationId, headings, 
             <option value={50}>50 entries</option>
           </select>
         </div>
-        <div id={paginationId}></div>
+        <div id={paginationId} className="pagination"></div>
       </div>
     </div>
   );
-}
+};
 
 export default Table;
