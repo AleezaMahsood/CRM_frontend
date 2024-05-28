@@ -82,7 +82,7 @@ const AdminChart = () => {
   };
 
   return (
-    <div className="w-100 h-auto">
+    <div className="w-100 h-auto lg:ml-[15rem] ml-0">
       {
         chartData?.datasets?.length >0 &&
         <Line data={chartData} options={options} />

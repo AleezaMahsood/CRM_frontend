@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import axios from '../utils/axios';
+import RootLayout from "@/app/layout";
 const Login = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -32,10 +33,11 @@ const Login = () => {
   
         // Once user data is obtained, set the user role state
         setUserRole(userDataResponse.data.role);
-  
+        const role = userDataResponse.data.role;
+        localStorage.setItem('userRole', role); 
         // Redirect based on user role
         if (userDataResponse.data.role === "admin") {
-          router.push("/Leads/CreateLeads");
+          router.push(`/Leads/CreateLeads`);
         } else {
           router.push("/user/dashboard");
         }

@@ -48,7 +48,6 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="sm:flex flex-col mx-0 my-0">
       {/* Sidebar button */}
       <button
         data-drawer-target="sidebar-multi-level-sidebar"
@@ -77,7 +76,7 @@ const Sidebar = () => {
       {/* Sidebar */}
       <aside
         id="sidebar-multi-level-sidebar"
-        className={`w-64 h-screen transition-transform duration-200 ease-in-out transform ${
+        className={`fixed top-0 left-0 z-40 w-64 h-screen transition-transform duration-200 ease-in-out transform ${
          isMenuOpen? 'translate-x-0' : '-translate-x-full'
        } sm:translate-x-0`}
         
@@ -431,7 +430,6 @@ const Sidebar = () => {
           </ul>
         </div>
       </aside>
-      </div>
     </>
   );
 };

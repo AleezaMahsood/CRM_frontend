@@ -25,6 +25,7 @@ body {
     max-width: 100%;
     overflow-x: auto;
     padding: 20px;
+    margin-left: 15rem;
 }
 
 /* Table styles */
@@ -139,6 +140,9 @@ td:nth-child(16) {
 
 /* Responsive layout */ 
 @media (max-width: 768px) {
+    .table-container{
+        margin-left: 0;
+    }
     th,
     td {
         white-space: nowrap;
