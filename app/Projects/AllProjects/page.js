@@ -1,7 +1,10 @@
+import ViewProject from "@/views/ViewProject";
 import React from "react";
 
 const page = () => {
-  return <div>All Projects</div>;
+  return(
+    <ViewProject />
+  )
 };
 
 export default page;

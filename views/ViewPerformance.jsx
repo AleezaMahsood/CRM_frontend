@@ -1,9 +1,9 @@
 'use client'
 import React from 'react'
 import Table from '@/components/Table';
-import useUserPerformance from '@/hooks/useUserPerformance';
+import usePerformance from '@/hooks/usePerformance';
 const ViewPerformance = () => {
-  const{data,isLoading,isError}=useUserPerformance()
+  const{data,isLoading,isError}=usePerformance()
 
   /*const data = [
     {user_id: 1, name: 'John Doe', email: 'john.doe@example.com', New: 10, Pending: 5, Follow_Ups: 3, 'Not Responding': 2, 'Not Answering': 1, 'Meeting Scheduled': 4, 'Not Interested': 6, Interested: 8, Converted: 7, Rejected: 2, Invalid: 1, Overall: 46, conversion_rate: '15%', logged_in: '2024-04-01'},

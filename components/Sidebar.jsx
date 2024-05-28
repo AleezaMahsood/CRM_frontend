@@ -48,6 +48,7 @@ const Sidebar = () => {
 
   return (
     <>
+      <div className="sm:flex flex-col mx-0 my-0">
       {/* Sidebar button */}
       <button
         data-drawer-target="sidebar-multi-level-sidebar"
@@ -55,7 +56,7 @@ const Sidebar = () => {
         aria-controls="sidebar-multi-level-sidebar"
         type="button"
         onClick={handleToggleMenu}
-        className="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        className="flex flex-col items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
         <span className="sr-only">Open sidebar</span>
         <svg
@@ -76,7 +77,7 @@ const Sidebar = () => {
       {/* Sidebar */}
       <aside
         id="sidebar-multi-level-sidebar"
-        className={`z-40 w-64 h-screen transition-transform duration-200 ease-in-out transform ${
+        className={`w-64 h-screen transition-transform duration-200 ease-in-out transform ${
          isMenuOpen? 'translate-x-0' : '-translate-x-full'
        } sm:translate-x-0`}
         
@@ -172,7 +173,7 @@ const Sidebar = () => {
               >
                 <li>
                   <a
-                    href="Leads/AllLeads"
+                    href="/Leads/AllLeads"
                     className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
                     Over-All Leads
@@ -188,7 +189,7 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <a
-                    href="Leads/ImportLead"
+                    href="/Leads/ImportLead"
                     className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
                     Import Lead
@@ -385,7 +386,7 @@ const Sidebar = () => {
             </li>
             <li>
               <a
-                href="/Performance"
+                href="/adminPerformance"
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <svg
@@ -430,6 +431,7 @@ const Sidebar = () => {
           </ul>
         </div>
       </aside>
+      </div>
     </>
   );
 };

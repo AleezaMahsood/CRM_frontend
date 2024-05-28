@@ -25,13 +25,13 @@ const Table = ({ data, tableId, entriesPerPageSelectId, paginationId, headings, 
             const cell = document.createElement('td');
 
             if (rowItem === 'nameEmail') {
-              cell.innerHTML = `<strong>${entry.name}</strong><br/><a href="mailto:${entry.email}">${entry.email}</a>`;
+              cell.innerHTML = `<strong>${entry.firstName} ${entry.lastName}</strong><br/><a href="mailto:${entry.email}">${entry.email}</a>`;
             } 
             else if (rowItem === 'leadNamePhone') {
-              cell.innerHTML = `<strong>${entry.leadName}</strong><br/><a href="mailto:${entry.phone}">${entry.phone}</a>`;
+              cell.innerHTML = `<strong>${entry.leadName}</strong><br/><a href="mailto:${entry.phoneNumber}">${entry.phoneNumber}</a>`;
             }
             else if (rowItem === 'user_id_Dept') {
-              cell.innerHTML = `<strong>${entry.user_id}</strong><br/><a href="mailto:${entry.Dept}">${entry.Dept}</a>`;
+              cell.innerHTML = `<strong>${entry.firstName} ${entry.lastName}</strong><br/><a href="mailto:${entry.department}">${entry.department}</a>`;
             }
             else if (entry[rowItem] === null || entry[rowItem] === undefined) {
               cell.textContent = '-'; 
