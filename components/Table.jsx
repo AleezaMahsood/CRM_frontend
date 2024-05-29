@@ -95,10 +95,10 @@ const Table = ({ data, tableId, entriesPerPageSelectId, paginationId, headings, 
         <div id="pagination-options">
           <select id={entriesPerPageSelectId}>
             <option value={10} selected>10 entries</option>
-            <option value={15}>15 entries</option>
-            <option value={20}>20 entries</option>
             <option value={25}>25 entries</option>
             <option value={50}>50 entries</option>
+            <option value={75}>75 entries</option>
+            <option value={100}>100 entries</option>
           </select>
         </div>
         <div id={paginationId} className="pagination"></div>

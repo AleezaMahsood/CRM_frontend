@@ -27,7 +27,7 @@ const AdminChart = () => {
               label: status,
               data: labels.map(date => data[date][status] || 0),
               borderColor: getColor(status),
-              borderWidth: 2,
+              borderWidth: 3,
               fill: false,
               tension: 0.1,
               borderDash: [5, 5], // Dotted line
@@ -82,7 +82,7 @@ const AdminChart = () => {
   };
 
   return (
-    <div className="w-100 h-auto lg:ml-[15rem] ml-0">
+    <div className="w-100 h-auto">
       {
         chartData?.datasets?.length >0 &&
         <Line data={chartData} options={options} />
