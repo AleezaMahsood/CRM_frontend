@@ -111,7 +111,7 @@ const CreateLeads = () => {
         setSuccessMessage("Lead created successfully!");
         setTimeout(() => {
           setSuccessMessage("");
-          //reset();
+          reset();
         }, 3000);
       } catch (error) {
         console.error('Error creating lead:', error);
