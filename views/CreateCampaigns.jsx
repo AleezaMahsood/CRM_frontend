@@ -1,33 +1,62 @@
 "use client";
-import React, { useState } from "react";
-import useCampaign from "@/hooks/useCampaign";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import axios from "@/utils/axios";
-import { Noto_Sans_Tamil_Supplement } from "next/font/google";
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import axios from 'axios';
 
-const CreateCampaign = () => {
-  const [start_date, setstart_date] = useState(null);
-  const [end_date, setend_date] = useState(null);
+const CampaignForm = () => {
+  const { register, handleSubmit, setError, clearErrors, formState: { errors }, getValues, reset } = useForm();
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const submitForm = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const frmData = {
-      campaign_name: formData.get("campaign_name"), // Name of the Campaign
-      description: formData.get("description"), //Description of the project
-      start_date: start_date ? start_date.toISOString().split('T')[0] : null, // Start date of campaign
-      end_date: end_date ? end_date.toISOString().split('T')[0] : null,// End Date of the campaign
-      expected_revenue: formData.get("expected_revenue"), //Expected revenue for this campaign
-      actual_cost: formData.get("actual_cost"), // Actual Cost for this campaign
-    };
+  const validateCampaignName = async (campaign_name) => {
+    try {
+      const response = await axios.post("http://localhost:8000/api/campaigns/check-campaign-name", { campaign_name });
+      if (response.data.exists) {
+        setError("campaign_name", {
+          type: "manual",
+          message: "campaign name already exists",
+        });
+        return false;
+      }
+      clearErrors("campaign_name");
+      return true;
+    } catch (error) {
+      setError("campaign_name", {
+        type: "manual",
+        message: "Error checking campaign name uniqueness",
+      });
+      return false;
+    }
+  };
 
-    console.log(frmData);
-    axios.post("/api/campaigns", frmData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+  const validateNumber = (value) => {
+    const isNumber = !isNaN(value) && value > 0;
+    return isNumber || "Value must be a positive number";
+  };
+
+  const onSubmit = async (formData) => {
+    const isCampaignNameValid = await validateCampaignName(formData.campaign_name);
+
+    if (isCampaignNameValid) {
+      try {
+        const response = await axios.post("http://localhost:8000/api/campaigns", formData, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      setSuccessMessage("Campaign created successfully!");
+      setTimeout(() => {
+        setSuccessMessage("");
+        reset();
+      }, 3000);
+    }  catch (error) {
+          console.error('Error creating campaign:', error);
+           setErrorMessage(error.response?.data?.message || "An error occurred.");
+           setTimeout(() => {
+           setErrorMessage("");
+      },   3000);
+    }
+  }
   };
 
   return (
@@ -37,19 +66,23 @@ const CreateCampaign = () => {
           New Campaign
         </h2>
         <hr className="mb-4" />
-        <form
-          action="#"
-          method="POST"
-          onSubmit={submitForm}
-          className="space-y-6"
-        >
+        {successMessage && (
+          <div className="mb-4 p-4 bg-gray-100 border-l-4 border-green-500 text-green-700">
+            {successMessage}
+          </div>
+        )}
+        {errorMessage && (
+          <div className="mb-4 p-4 bg-gray-100 border-l-4 border-red-500 text-red-700">
+            {errorMessage}
+          </div>
+        )}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               Campaign Details
             </h3>
             <p className="text-gray-500 text-sm mb-4">
-              Add details such as title and description so it is easy to
-              distinguish between one or more campaigns.
+              Add details such as title and description so it is easy to distinguish between one or more campaigns.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
@@ -63,10 +96,20 @@ const CreateCampaign = () => {
                   type="text"
                   name="campaign_name"
                   id="campaign_name"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-72 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  {...register("campaign_name", {
+                    required: "Campaign name is required",
+                    maxLength: {
+                      value: 150,
+                      message: "Campaign Name cannot exceed 150 characters",
+                    },
+                   
+                  })}
+                  className={`bg-gray-50 border ${errors.campaign_name ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
                   placeholder="Enter campaign name"
-                  required
                 />
+                {errors.campaign_name && (
+                  <p className="text-red-500 text-sm">{errors.campaign_name.message}</p>
+                )}
               </div>
               <div>
                 <label
@@ -79,10 +122,19 @@ const CreateCampaign = () => {
                   type="text"
                   name="description"
                   id="description"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-72 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  {...register("description", {
+                    required: "Description is required",
+                    maxLength: {
+                      value: 255,
+                      message: "Description cannot exceed 255 characters",
+                    },
+                  })}
+                  className={`bg-gray-50 border ${errors.description ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
                   placeholder="Enter campaign description"
-                  required
                 />
+                {errors.description && (
+                  <p className="text-red-500 text-sm">{errors.description.message}</p>
+                )}
               </div>
             </div>
           </div>
@@ -91,8 +143,7 @@ const CreateCampaign = () => {
               Campaign Duration
             </h3>
             <p className="text-gray-500 text-sm mb-4">
-              Add details such as title and description so it is easy to
-              distinguish between one or more campaigns.
+              Add details such as title and description so it is easy to distinguish between one or more campaigns.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="relative w-full">
@@ -102,27 +153,13 @@ const CreateCampaign = () => {
                 >
                   Start Date:
                 </label>
-                <div className="relative w-full">
-                  <DatePicker
-                    id="start_date"
-                    selected={start_date}
-                    onChange={(date) => setstart_date(date)}
-                    dateFormat="yyyy/MM/dd"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-72 py-3 pl-10 pr-3.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholderText="yyyy/mm/dd"
-                  />
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg
-                      className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                    </svg>
-                  </div>
-                </div>
+                <input
+                  type="date"
+                  name="start_date"
+                  id="start_date"
+                  {...register("start_date")}
+                  className={`bg-gray-50 border ${errors.start_date ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+                />
               </div>
               <div className="relative w-full">
                 <label
@@ -131,27 +168,21 @@ const CreateCampaign = () => {
                 >
                   End Date:
                 </label>
-                <div className="relative w-full">
-                  <DatePicker
-                    id="end_date"
-                    selected={end_date}
-                    onChange={(date) => setend_date(date)}
-                    dateFormat="yyyy/MM/dd"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-72 py-3 pl-10 pr-3.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    placeholderText="yyyy/mm/dd"
-                  />
-                  <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg
-                      className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                    </svg>
-                  </div>
-                </div>
+                <input
+                  type="date"
+                  name="end_date"
+                  id="end_date"
+                  {...register("end_date", {
+                    validate: (value) => {
+                      const startDate = getValues("start_date");
+                      return value >= startDate || "End date must be after start date";
+                    },
+                  })}
+                  className={`bg-gray-50 border ${errors.end_date ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+                />
+                {errors.end_date && (
+                  <p className="text-red-500 text-sm">{errors.end_date.message}</p>
+                )}
               </div>
             </div>
           </div>
@@ -161,8 +192,7 @@ const CreateCampaign = () => {
               Campaign Budget
             </h3>
             <p className="text-gray-500 text-sm mb-4">
-              Select budget for this campaign. This can be used to determine how
-              well the campaign is performing.
+              Select budget for this campaign. This can be used to determine how well the campaign is performing.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
@@ -173,13 +203,19 @@ const CreateCampaign = () => {
                   Expected Revenue:
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   name="expected_revenue"
                   id="expected_revenue"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-72 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="e.g:100,000,000"
-                  required
+                  {...register("expected_revenue", {
+                    required: "Expected revenue is required",
+                    validate: validateNumber,
+                  })}
+                  className={`bg-gray-50 border ${errors.expected_revenue ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+                  placeholder="e.g:100000000"
                 />
+                {errors.expected_revenue && (
+                  <p className="text-red-500 text-sm">{errors.expected_revenue.message}</p>
+                )}
               </div>
               <div>
                 <label
@@ -189,13 +225,19 @@ const CreateCampaign = () => {
                   Actual Cost:
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   name="actual_cost"
                   id="actual_cost"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-72 p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="e.g:10,000,000"
-                  required
+                  {...register("actual_cost", {
+                    required: "Actual cost is required",
+                    validate: validateNumber,
+                  })}
+                  className={`bg-gray-50 border ${errors.actual_cost ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500`}
+                  placeholder="e.g:10000000"
                 />
+                {errors.actual_cost && (
+                  <p className="text-red-500 text-sm">{errors.actual_cost.message}</p>
+                )}
               </div>
             </div>
           </div>
@@ -211,4 +253,4 @@ const CreateCampaign = () => {
   );
 };
 
-export default CreateCampaign;
+export default CampaignForm;
