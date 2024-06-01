@@ -34,6 +34,9 @@
     #main {
         width: 95%;
     }
+    .input-container {
+        flex-direction: column;
+    }
 }
 
 .box {
