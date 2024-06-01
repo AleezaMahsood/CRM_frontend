@@ -10,7 +10,9 @@ function Providers({ children }) {
 
   return (
     <QueryClientProvider client={client}>
-      <ReactQueryStreamedHydration>{children}</ReactQueryStreamedHydration>
+      <ReactQueryStreamedHydration>
+        {children}
+      </ReactQueryStreamedHydration>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );

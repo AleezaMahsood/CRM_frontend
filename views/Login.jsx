@@ -37,9 +37,9 @@ const Login = () => {
         localStorage.setItem('userRole', role); 
         // Redirect based on user role
         if (userDataResponse.data.role === "admin") {
-          router.push(`/Leads/CreateLeads`);
+          window.location= "/Leads/CreateLeads";
         } else {
-          router.push("/user/dashboard");
+          window.location = "/user/dashboard";
         }
       } else {
         // Handle login error

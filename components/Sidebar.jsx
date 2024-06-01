@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect,useRef } from "react";
-
+import { useRouter } from "next/navigation";
 const Sidebar = () => {
   const [leadsDropdown, setLeadsDropdown] = useState(false);
   const [projectsDropdown, setProjectsDropdown] = useState(false);
@@ -17,6 +17,36 @@ const Sidebar = () => {
   const handleToggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+        alert('No token found.');
+        return;
+    }
+
+    const response = await fetch('http://localhost:8000/api/auth/logout', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    });
+
+    if (response.ok) {
+        // Clear the token from local storage
+        localStorage.removeItem('token');
+        localStorage.removeItem('userRole');
+
+        // Redirect to login page on successful sign out
+        window.location='/login';
+    } else {
+        // Handle sign out failure
+        alert('Sign out failed.');
+    }
+};
   
   const handleLeadsDropdownClick = () => {
     setLeadsDropdown(!leadsDropdown);
@@ -403,10 +433,9 @@ const Sidebar = () => {
               </a>
             </li>
             <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
+              <button
+                onClick={handleSignOut}
+                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                 <svg
                   className="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                   aria-hidden="true"
@@ -425,7 +454,7 @@ const Sidebar = () => {
                 <span className="flex-1 ms-3 whitespace-nowrap">
                   Sign Out
                 </span>
-              </a>
+              </button>
             </li>
           </ul>
         </div>
