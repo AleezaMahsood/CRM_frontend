@@ -25,9 +25,6 @@
     #main {
         width: 90%;
     }
-    .input-container {
-        flex-direction: column;
-    }
 }
 
 @media (max-width: 576px) {
