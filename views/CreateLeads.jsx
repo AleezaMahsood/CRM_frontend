@@ -62,46 +62,14 @@ const CreateLeads = () => {
     return isNumber || "Value must be a positive number";
   };
 
-  const checkEmail = async (email) => {
-    if (!email) return { emailIsValid: true };
-    try {
-      const response = await axios.post('http://localhost:8000/api/leads/check-email', { email });
-      if (response.data.exists) {
-        setError('email', { type: 'manual', message: 'Email already exists' });
-        return { emailIsValid: false };
-      }
-      return { emailIsValid: true };
-    } catch (error) {
-      console.error('Error checking email:', error);
-      setErrorMessage('Error checking email.');
-      return { emailIsValid: false };
-    }
-  };
-
-  const checkPhoneNumber = async (phoneNumber) => {
-    if (!phoneNumber) return { phoneIsValid: true };
-    try {
-      const response = await axios.post('http://localhost:8000/api/leads/check-phone', { phoneNumber });
-      if (response.data.exists) {
-        setError('phoneNumber', { type: 'manual', message: 'Phone number already exists' });
-        return { phoneIsValid: false };
-      }
-      return { phoneIsValid: true };
-    } catch (error) {
-      console.error('Error checking phone number:', error);
-      setErrorMessage('Error checking phone number.');
-      return { phoneIsValid: false };
-    }
-  };
+ 
 
   const submitForm = async (formData) => {
     formData.created_by = userId;
     console.log('Form Data:', formData);
 
-    const { emailIsValid } = await checkEmail(formData.email);
-    const { phoneIsValid } = await checkPhoneNumber(formData.phoneNumber);
 
-    if (emailIsValid && phoneIsValid) {
+    
       try {
         const response = await axios.post("/api/leads/admin", formData, {
           headers: {
@@ -117,7 +85,7 @@ const CreateLeads = () => {
         console.error('Error creating lead:', error);
         setErrorMessage(error.response?.data?.message || "An error occurred.");
       }
-    }
+    
   };
 
   const { data: enumsData } = useLeadEnums();
