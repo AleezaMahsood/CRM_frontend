@@ -83,18 +83,13 @@ export default function UserSidebar({ show, setter }) {
                 </div>
                 <div className="flex flex-col gap-2 mt-2">
                     <MenuItem
-                        name="User"
-                        route="/"
-                        icon={BiSolidUser}
-                    />
-                    <MenuItem
                         name="Dashboard"
                         route="/user/dashboard"
                         icon={BiCalendarWeek}
                     />
                     <MenuItem
                         name="All Leads"
-                        route="/user/LeadByStatus"
+                        route="/user/ViewLeads"
                         icon={BiSolidUserDetail }
                     />
                      <MenuItem
@@ -106,11 +101,6 @@ export default function UserSidebar({ show, setter }) {
                         name="Account"
                         route="/user/EditUser"
                         icon={BiUserCircle }
-                    />
-                     <MenuItem
-                        name="Graph Report"
-                        route="/#"
-                        icon={BiFoodMenu }
                     />
                      <button className={`flex gap-1 [&>*]:my-auto text-md pl-6 py-3 border-b-[1px] border-b-black/10 text-black/70 hover:text-black hover:bg-gray-100`} onClick={handleSignOut}><BiSolidLogOut className={`text-xl flex [&>*]:mx-auto w-[30px]`} /><strong> Sign Out </strong></button>
                 </div>

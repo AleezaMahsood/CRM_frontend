@@ -162,7 +162,6 @@ export default function TestSidebar({ show, setter }) {
                         links={[
                             { name: "Over-All Users", route: "/AllUsers"},
                             { name: "Add User", route: "/register"},
-                            { name: "Feedbacks", route: "/Users/Feedbacks" }
                         ]}
                         icon={BiSolidGroup}
                         dropdownKey="users"
