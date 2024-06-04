@@ -24,19 +24,19 @@ const Login = () => {
         localStorage.setItem("token", token);
   
         // Fetch user data after successful login
-        const userDataResponse = await axios.post("/api/auth/me", null, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
+      //  const userDataResponse = await axios.post("/api/auth/me", null, {
+       //   headers: {
+         //   Authorization: `Bearer ${token}`,
+         //   "Content-Type": "application/json",
+         // },
+        //});
   
         // Once user data is obtained, set the user role state
-        setUserRole(userDataResponse.data.role);
-        const role = userDataResponse.data.role;
+        setUserRole(response.data.role);
+        const role = response.data.role;
         localStorage.setItem('userRole', role); 
         // Redirect based on user role
-        if (userDataResponse.data.role === "admin") {
+        if (role === "admin") {
           window.location= "/Leads/CreateLeads";
         } else {
           window.location = "/user/dashboard";
@@ -132,7 +132,7 @@ const Login = () => {
                 </div>
                 <button type="submit" style={{ width: "100%",backgroundColor:"blue" }} className="  text-white bg-teal-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
                   <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                      Don’t have an account yet? <a href="#" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</a>
+                      Don’t have an account yet? <a href="/register" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign up</a>
                   </p>
               </form>
             </div>

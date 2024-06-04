@@ -39,9 +39,9 @@ const CreateUsers = () => {
 
     return (
         <div className={styles.container} id="main">
-            <h2 className="heading">New User</h2>
+            <h2 className="heading">New Employee</h2>
             <hr></hr>
-            <h3 className="subheading">User Details</h3>
+            <h3 className="subheading">Employee Details</h3>
             <p className="description">Add details such as name, email, phone number and other personal information.</p>
             <div className={styles.box}>
                 <form id="Add_Users" onSubmit={submitForm} className="form">

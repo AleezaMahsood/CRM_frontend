@@ -94,17 +94,17 @@ export default function UserSidebar({ show, setter }) {
                     />
                     <MenuItem
                         name="All Leads"
-                        route="/user/UserLead"
+                        route="/user/LeadByStatus"
                         icon={BiSolidUserDetail }
                     />
                      <MenuItem
                         name="Add Lead"
-                        route="/user/LeadsByStatus"
+                        route="/user/UserLead"
                         icon={BiSolidUserPlus  }
                     />
                      <MenuItem
                         name="Account"
-                        route="/#"
+                        route="/user/EditUser"
                         icon={BiUserCircle }
                     />
                      <MenuItem

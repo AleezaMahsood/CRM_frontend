@@ -16,12 +16,6 @@ export default function MenuBarMobile({ setter }) {
                 <Icon />
             </button>
            
-            <Link
-                className={"text-3xl text-black/70"}
-                href="/login"
-            >
-                <FaUser />
-            </Link>
         </nav>
     )
 }
