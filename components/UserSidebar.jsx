@@ -77,9 +77,9 @@ export default function UserSidebar({ show, setter }) {
 
     return (
         <>
-            <div className={`${className} ${appendClass}`}>
+            <div className={`${className} ${appendClass}`} style={{ backgroundColor: "#fafafa", paddingTop:"5px", paddingRight: "10px"}}>
                 <div className="p-1 flex">
-                    <img src="/logo.jpeg" alt="CRM Image" className="mr-4"></img>
+                    <img src="/logo.png" alt="CRM Image" className="mr-4" width="100px" style={{ paddingLeft: "23px" }}></img>
                 </div>
                 <div className="flex flex-col gap-2 mt-2">
                     <MenuItem
