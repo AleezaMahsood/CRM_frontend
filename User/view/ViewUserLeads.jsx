@@ -10,6 +10,7 @@ const ViewUserLeads = () => {
   const [token, setToken] = useState("");
   const [userId, setUserId] = useState("");
   const [leads, setLeads] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [editLeadId, setEditLeadId] = useState(null);
@@ -30,7 +31,8 @@ const ViewUserLeads = () => {
         }
         const userData = await response.json();
         setUserId(userData.id);
-        fetchUserLeads(userData.id);
+        await fetchUserLeads(userData.id);
+        await fetchProjects();
       } catch (error) {
         console.error("Error fetching user data:", error);
         setIsError(true);
@@ -45,11 +47,25 @@ const ViewUserLeads = () => {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         });
-        console.log(response.data)
         setLeads(response.data);
-        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching user leads:", error);
+        setIsError(true);
+        setIsLoading(false);
+      }
+    };
+
+    const fetchProjects = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/projects", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setProjects(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
         setIsError(true);
         setIsLoading(false);
       }
@@ -77,8 +93,18 @@ const ViewUserLeads = () => {
     }
   };
 
+  const getProjectName = (projectId) => {
+    const project = projects.find(project => project.id === projectId);
+    return project ? project.project_name : "Unknow Project";
+  };
+
+  const enhancedLeads = leads.map(lead => ({
+    ...lead,
+    project_name: getProjectName(lead.project_id)
+  }));
+
   const headings = ['#', 'CLIENT', 'PROJECT', 'LEAD DATE', 'STATUS'];
-  const rows = ['id', 'leadNamePhone', 'project_id', 'date', 'status'];
+  const rows = ['id', 'leadNamePhone', 'project_name', 'date', 'status'];
 
   if (isLoading || isEditLoading) {
     return <div>Loading...</div>;
@@ -103,7 +129,7 @@ const ViewUserLeads = () => {
         <div>
           <LeadTable
             title="All Leads"
-            data={Array.isArray(leads) ? leads : []}
+            data={Array.isArray(enhancedLeads) ? enhancedLeads : []}
             tableId="exampleTable"
             entriesPerPageSelectId="entriesPerPageSelect"
             paginationId="pagination"
@@ -114,7 +140,7 @@ const ViewUserLeads = () => {
         </div>
       )}
     </div>
-  );
+  ); 
 };
 
 export default ViewUserLeads;

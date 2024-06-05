@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <div className="min-h-screen">
-          <div className="flex">
+          <div className="flex overflow-y-hidden">
             <Providers>
             <RecoilRoot>
               <RenderSidebar show={showSidebar} setter={setShowSidebar} />

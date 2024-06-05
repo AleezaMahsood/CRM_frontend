@@ -5,9 +5,54 @@ import { useEnums } from '@/hooks/useEnums';
 import axios from '@/utils/axios';
 
 const CreateUsers = () => {
+    const validateForm = (formData) => {
+        const firstName = formData.get('first-name');
+        const lastName = formData.get('last-name');
+        const email = formData.get('email');
+        const password = formData.get('password');
+        const password_confirmation = formData.get('password_confirmation');
+        const phone = formData.get('phone');
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phonePattern = /^[0-9]{11}$/;
+        const namePattern = /^[A-Za-z]+$/;
+
+        if (!emailPattern.test(email)) {
+            alert("Please enter a valid email address.");
+            return false;
+        }
+
+        if (password !== password_confirmation) {
+            alert("Passwords do not match.");
+            return false;
+        }
+
+        if (!phonePattern.test(phone)) {
+            alert("Please enter a valid phone number with 11 digits.");
+            return false;
+        }
+
+        if (!namePattern.test(firstName)) {
+            alert("First name must contain only letters with no spaces.");
+            return false;
+        }
+
+        if (!namePattern.test(lastName)) {
+            alert("Last name must contain only letters with no spaces.");
+            return false;
+        }
+
+        return true;
+    };
+
     const submitForm = (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
+
+        if (!validateForm(formData)) {
+            return;
+        }
+
         const frmData = {
             firstName: formData.get('first-name'),
             lastName: formData.get('last-name'),
@@ -32,7 +77,11 @@ const CreateUsers = () => {
                     "Content-Type": "application/json"
                 }
             }
-        );
+        ).then(response => {
+            alert("User created successfully!");
+        }).catch(error => {
+            alert("Error creating user: " + error.message);
+        });
     };
 
     const { data: enumsData } = useEnums();
@@ -48,8 +97,28 @@ const CreateUsers = () => {
                     <div className="form-group">
                         <label htmlFor="full-name" className="label">Full Name:<span className={styles.required}></span></label>
                         <div className="input-container">
-                            <input type="text" id="first-name" name="first-name" placeholder="Enter First Name" className="input" required />
-                            <input type="text" id="last-name" name="last-name" placeholder="Enter Last Name" className="input" required />
+                            <input 
+                                type="text" 
+                                id="first-name" 
+                                name="first-name" 
+                                minLength="3" 
+                                pattern="[A-Za-z]+" 
+                                placeholder="Enter First Name" 
+                                className="input" 
+                                required 
+                                title="First name must contain only letters with no spaces."
+                            />
+                            <input 
+                                type="text" 
+                                id="last-name" 
+                                name="last-name" 
+                                minLength="3" 
+                                pattern="[A-Za-z]+" 
+                                placeholder="Enter Last Name" 
+                                className="input" 
+                                required 
+                                title="Last name must contain only letters with no spaces."
+                            />
                         </div>
                     </div>
                     <div className="form-group">
@@ -59,8 +128,8 @@ const CreateUsers = () => {
                     <div className="form-group">
                         <label htmlFor="password" className="label">Password:<span className={styles.required}></span></label>
                         <div className="input-container">
-                            <input type="password" id="password" name="password" placeholder="Enter Password" className="input" required />
-                            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" className="input" required />
+                            <input type="password" id="password" name="password" placeholder="Enter Password" className="input" required minLength="8" />
+                            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" className="input" required minLength="8" />
                         </div>
                     </div>
                     <div className="form-group">
