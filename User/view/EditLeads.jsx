@@ -1,15 +1,24 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import axios from '@/utils/axios';
 import { useLeadEnums } from '@/hooks/useLeadEnums';
 
+const fetchProjects = async () => {
+  const response = await axios.get('/api/projects');
+  return response.data;
+};
+
 const EditLeadForm = ({ leadId, onUpdate, leadData, onClose }) => {
   const [formData, setFormData] = useState({});
-  const [projects, setProjects] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [errors, setErrors] = useState({});
   const { data: enumsData } = useLeadEnums();
+  const { data: projects } = useQuery({
+    queryKey: ['projects'],
+    queryFn: fetchProjects,
+  });
 
   useEffect(() => {
     if (leadData) {
@@ -17,31 +26,18 @@ const EditLeadForm = ({ leadId, onUpdate, leadData, onClose }) => {
     }
   }, [leadData]);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const response = await axios.get('/api/projects');
-        setProjects(response.data);
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-      }
-    };
-
-    fetchProjects();
-  }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
-    });
+    }));
 
     // Clear error message for the field being edited
-    setErrors({
-      ...errors,
+    setErrors((prevErrors) => ({
+      ...prevErrors,
       [name]: "",
-    });
+    }));
   };
 
   const formatDateForDisplay = (dateString) => {
@@ -60,15 +56,11 @@ const EditLeadForm = ({ leadId, onUpdate, leadData, onClose }) => {
     return `${year}-${month}-${day}`;
   };
 
-  const validatePhoneNumber = (value) => {
-    const isValid = /^[0-9]{11}$/.test(value);
-    return isValid || "Phone number must be exactly 11 digits and contain only numbers";
-  };
+  const validatePhoneNumber = (value) => /^[0-9]{11}$/.test(value) || "Phone number must be exactly 11 digits and contain only numbers";
 
   const validateBudget = (value) => {
     if (value === "" || value === undefined || value === null) return true;
-    const isValid = !isNaN(value) && value >= 0;
-    return isValid || "Budget must be a positive number";
+    return !isNaN(value) && value >= 0 || "Budget must be a positive number";
   };
 
   const handleSubmit = async (e) => {
@@ -78,28 +70,28 @@ const EditLeadForm = ({ leadId, onUpdate, leadData, onClose }) => {
     const budgetValidation = validateBudget(formData.budget);
 
     if (phoneValidation !== true) {
-      setErrors({
-        ...errors,
+      setErrors((prevErrors) => ({
+        ...prevErrors,
         phoneNumber: phoneValidation,
-      });
+      }));
       setErrorMessage("");
       return;
     }
 
     if (!formData.status) {
-      setErrors({
-        ...errors,
+      setErrors((prevErrors) => ({
+        ...prevErrors,
         status: "Status is required",
-      });
+      }));
       setErrorMessage("");
       return;
     }
 
     if (budgetValidation !== true) {
-      setErrors({
-        ...errors,
+      setErrors((prevErrors) => ({
+        ...prevErrors,
         budget: budgetValidation,
-      });
+      }));
       setErrorMessage("");
       return;
     }
@@ -136,8 +128,10 @@ const EditLeadForm = ({ leadId, onUpdate, leadData, onClose }) => {
     }
   };
 
+  const formattedProjects = useMemo(() => projects || [], [projects]);
+
   return (
-    <section className="bg-white dark:bg-gray-900 flex mt-2"> {/* Reduced top margin */}
+    <section className="bg-white dark:bg-gray-900 flex mt-2">
       <div className="py-4 px-4 mx-auto max-w-xl lg:max-w-2xl w-1/3">
         <button
           onClick={onClose}
@@ -146,10 +140,8 @@ const EditLeadForm = ({ leadId, onUpdate, leadData, onClose }) => {
           Close
         </button>
       </div>
-      <div className="py-4 px-4 mx-auto max-w-xl lg:max-w-2xl w-2/3"> {/* Reduced top padding */}
-        <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
-          Edit Lead
-        </h2>
+      <div className="py-4 px-4 mx-auto max-w-xl lg:max-w-2xl w-2/3">
+        <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">Edit Lead</h2>
         <hr className="mb-2" />
         {successMessage && (
           <div className="mb-4 p-4 bg-gray-100 border-l-4 border-green-500 text-green-700">
@@ -163,17 +155,11 @@ const EditLeadForm = ({ leadId, onUpdate, leadData, onClose }) => {
         )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              Lead Details
-            </h3>
-            <p className="text-gray-500 text-sm mb-4">
-              Edit details such as name, phone number, date, and project.
-            </p>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Lead Details</h3>
+            <p className="text-gray-500 text-sm mb-4">Edit details such as name, phone number, date, and project.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <label htmlFor="leadName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Name:
-                </label>
+                <label htmlFor="leadName" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name:</label>
                 <input
                   type="text"
                   name="leadName"
@@ -185,9 +171,7 @@ const EditLeadForm = ({ leadId, onUpdate, leadData, onClose }) => {
                 />
               </div>
               <div>
-                <label htmlFor="date" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  Date:
-                </label>
+                <label htmlFor="date" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date:</label>
                 <input
                   type="date"
                   name="date"
@@ -201,9 +185,7 @@ const EditLeadForm = ({ leadId, onUpdate, leadData, onClose }) => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="phoneNumber" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Phone:
-              </label>
+              <label htmlFor="phoneNumber" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone:</label>
               <input
                 type="tel"
                 name="phoneNumber"
@@ -220,9 +202,7 @@ const EditLeadForm = ({ leadId, onUpdate, leadData, onClose }) => {
               )}
             </div>
             <div>
-              <label htmlFor="status" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Status:
-              </label>
+              <label htmlFor="status" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status:</label>
               <select
                 name="status"
                 id="status"
@@ -244,9 +224,7 @@ const EditLeadForm = ({ leadId, onUpdate, leadData, onClose }) => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="budget" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Budget:
-              </label>
+              <label htmlFor="budget" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Budget:</label>
               <input
                 type="number"
                 name="budget"
@@ -263,9 +241,7 @@ const EditLeadForm = ({ leadId, onUpdate, leadData, onClose }) => {
               )}
             </div>
             <div>
-              <label htmlFor="project_id" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                Project:
-              </label>
+              <label htmlFor="project_id" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Project:</label>
               <select
                 name="project_id"
                 id="project_id"
@@ -274,7 +250,7 @@ const EditLeadForm = ({ leadId, onUpdate, leadData, onClose }) => {
                 className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
               >
                 <option value="">Select Project</option>
-                {projects.map((project) => (
+                {formattedProjects.map((project) => (
                   <option key={project.id} value={project.id}>
                     {project.project_name}
                   </option>
