@@ -1,26 +1,122 @@
-'use client'
-import React from 'react'
+'use client';
+import React, { useState, useEffect } from 'react';
 import Table from '@/components/Table';
 import { useUsers } from '@/hooks/useUsers';
 
 const ViewUsers = () => {
-  const{data,isLoading,isError}=useUsers()
-  
-  /*const data = [
-    { id: 1, name: 'John Doe', email: 'john.doe@example.com', department: 'IT', gender: 'Male', location: 'Location 1', status: 'Active', last_login_time: '3 weeks ago' },
-    { id: 2, name: 'Jane Smith', email: 'jane.smith@example.com', department: 'HR', gender: 'Female', location: 'Location 2', status: 'Inactive', last_login_time: '2 days ago' },
-    { id: 3, name: 'David Brown', email: 'david.brown@example.com', department: 'Finance', gender: 'Male', location: 'Location 3', status: 'Pending', last_login_time: '1 month ago' },
-  ];*/
+  const { data: users, isLoading, isError } = useUsers();
+  const [filteredData, setFilteredData] = useState([]);
+  const [filters, setFilters] = useState({});
+  const [selectedFilter, setSelectedFilter] = useState('');
 
-  // Define headings and rows
-  const headings = ['#', 'NAME', 'DEPARTMENT', 'GENDER', 'LOCATION', 'STATUS','LAST LOGGEDIN'];
+  useEffect(() => {
+    if (users) {
+      applyFilters();
+    }
+  }, [users, filters]);
+
+  const applyFilters = () => {
+    if (!users) return;
+
+    let filtered = users;
+
+    Object.keys(filters).forEach(key => {
+      if (filters[key]) {
+        filtered = filtered.filter(user => {
+          const value = user[key]?.toString().toLowerCase();
+          return value && value.includes(filters[key].toLowerCase());
+        });
+      }
+    });
+
+    setFilteredData(filtered.length > 0 ? filtered : []);
+  };
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prevFilters => {
+      const newFilters = {
+        ...prevFilters,
+        [name]: value
+      };
+
+      if (value === '') {
+        delete newFilters[name];
+      }
+
+      return newFilters;
+    });
+  };
+
+  const handleSelectedFilterChange = (e) => {
+    setSelectedFilter(e.target.value);
+  };
+
+  const clearFilters = () => {
+    setFilters({});
+    setSelectedFilter('');
+  };
+
+  const filterOptions = [
+    { value: 'firstName', label: 'Name' },
+    { value: 'department', label: 'Department' },
+    { value: 'gender', label: 'Gender' },
+    { value: 'location', label: 'Location' },
+    { value: 'status', label: 'Status' },
+    { value: 'last_login_time', label: 'Last Login Time' }
+  ];
+
+  const headings = ['#', 'NAME', 'DEPARTMENT', 'GENDER', 'LOCATION', 'STATUS', 'LAST LOGGEDIN'];
   const rows = ['id', 'nameEmail', 'department', 'gender', 'location', 'status', 'last_login_time'];
 
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error loading users</p>;
+
   return (
-    <div>
+    <div style={{ marginTop: '20px', marginRight: '20px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div></div> 
+        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+          <select
+            value={selectedFilter}
+            onChange={handleSelectedFilterChange}
+            style={{ marginRight: '10px', padding: '8px', borderRadius: '4px', border: '1px solid gray', width: '150px' }}
+          >
+            <option value="">Filter Records</option>
+            {filterOptions.map(option => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+          {selectedFilter && (
+            <input
+              type={selectedFilter === 'last_login_time' ? 'date' : 'text'}
+              name={selectedFilter}
+              placeholder={`Enter ${filterOptions.find(opt => opt.value === selectedFilter)?.label}`}
+              value={filters[selectedFilter] || ''}
+              onChange={handleFilterChange}
+              style={{ padding: '8px', borderRadius: '4px', border: '1px solid gray', width: '150px' }}
+            />
+          )}
+          <button
+            onClick={clearFilters}
+            style={{ marginLeft: '10px', padding: '8px', borderRadius: '4px', border: '1px solid gray' }}
+          >
+            Clear Filters
+          </button>
+        </div>
+      </div>
+      <div style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        {Object.keys(filters).map((key) => (
+          filters[key] && <div key={key} style={{ margin: '5px', padding: '5px 10px', borderRadius: '5px', background: '#B0E0FC' }}>
+            {filterOptions.find(opt => opt.value === key)?.label}: {filters[key]}
+          </div>
+        ))}
+      </div>
       <Table
         title="All Users"
-        data={data}
+        data={filteredData}
         tableId="exampleTable"
         entriesPerPageSelectId="entriesPerPageSelect"
         paginationId="pagination"
