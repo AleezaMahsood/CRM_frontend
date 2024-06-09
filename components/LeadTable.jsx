@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import '../styles/LeadTable.css';
 
-const LeadTable = ({ title, data, tableId, entriesPerPageSelectId, paginationId, headings, rows, handleEdit }) => {
+const LeadTable = memo(({ title, data, tableId, entriesPerPageSelectId, paginationId, headings, rows, handleEdit }) => {
   useEffect(() => {
     if (Array.isArray(data)) {
       const table = document.getElementById(tableId);
@@ -115,6 +115,6 @@ const LeadTable = ({ title, data, tableId, entriesPerPageSelectId, paginationId,
       </div>
     </div>
   );
-};
+});
 
 export default LeadTable;
