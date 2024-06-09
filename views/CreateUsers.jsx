@@ -79,6 +79,7 @@ const CreateUsers = () => {
             }
         ).then(response => {
             alert("User created successfully!");
+            window.location.href = '/login'; // Navigate to the login page
         }).catch(error => {
             alert("Error creating user: " + error.message);
         });
