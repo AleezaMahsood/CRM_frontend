@@ -1,22 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-const fetchUserLeads = async (token) => {
-  const { data } = await axios.get('http://127.0.0.1:8000/api/auth/user/leads', {
+const fetchUserLeads = async ({ queryKey }) => {
+  const [_, userId] = queryKey;
+  const token = localStorage.getItem("token");
+  const response = await axios.get(`http://localhost:8000/api/user/${userId}/lead`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-  return data;
+  return response.data;
 };
 
-const useUserLeads = (token) => {
+const useUserLeads = (userId) => {
   return useQuery({
-    queryKey: ['userLeads'],
-    queryFn: () => fetchUserLeads(token),
-    onError: (error) => {
-      console.error('Error fetching user leads:', error);
-    },
+    queryKey: ['userLeads', userId],
+    queryFn: fetchUserLeads,
+    enabled: !!userId,
   });
 };
 
