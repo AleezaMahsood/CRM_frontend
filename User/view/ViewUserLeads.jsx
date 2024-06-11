@@ -110,13 +110,13 @@ const ViewUserLeads = () => {
   const headings = ['#', 'CLIENT', 'PROJECT', 'LEAD DATE', 'STATUS'];
   const rows = ['id', 'leadNamePhone', 'project_name', 'date', 'status'];
 
-  if (isLeadsLoading || isProjectsLoading || isEditLoading) {
+ /* if (isLeadsLoading || isProjectsLoading || isEditLoading) {
     return <div>Loading...</div>;
   }
 
   if (isLeadsError || isProjectsError) {
     return <div>Error fetching data.</div>;
-  }
+  }*/
 
   return (
     <div className="container">
