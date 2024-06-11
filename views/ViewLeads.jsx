@@ -68,9 +68,6 @@ const ViewLeads = () => {
   const headings = ['#', 'CLIENT', 'PROJECT', 'LEAD DATE', 'ASSIGNED TO', 'STATUS'];
   const rows = ['id', 'leadNamePhone', 'project_name', 'date', 'user_id_Dept', 'status'];  
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error loading leads</p>;
-
   return (
     <div style={{ marginTop: '20px', marginRight: '20px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
