@@ -66,8 +66,6 @@ const ViewProject = () => {
   const headings = ['#', 'NAME', 'LOCATION', 'TYPE'];
   const rows = ['id', 'project_name', 'project_location', 'project_type'];
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error loading projects</p>;
 
   return (
     <div style={{ marginTop: '20px', marginRight: '20px' }}>
