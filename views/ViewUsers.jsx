@@ -69,8 +69,6 @@ const ViewUsers = () => {
   const headings = ['#', 'NAME', 'DEPARTMENT', 'GENDER', 'LOCATION', 'STATUS', 'LAST LOGGEDIN'];
   const rows = ['id', 'nameEmail', 'department', 'gender', 'location', 'status', 'last_login_time'];
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error loading users</p>;
 
   return (
     <div style={{ marginTop: '20px', marginRight: '20px' }}>
