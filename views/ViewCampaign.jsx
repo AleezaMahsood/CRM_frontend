@@ -65,8 +65,6 @@ const ViewCampaign = () => {
   const headings = ['NAME', 'DESCRIPTION'];
   const rows = ['campaign_name', 'description'];
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError) return <p>Error loading campaigns</p>;
 
   return (
     <div style={{ marginTop: '20px', marginRight: '20px' }}>
